@@ -1,3 +1,3 @@
 src/out
 src/.vs
-src/thirdparty/apr/out
+src/thirdparty/*/out

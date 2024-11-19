@@ -13,6 +13,7 @@ endif()
 include_directories(./include)
 include_directories(${base_srcdir}/thirdparty/apr/include)
 include_directories(${base_srcdir}/thirdparty/apr/include/arch/win32)
+include_directories(${base_srcdir}/thirdparty/sqlite-autoconf-3150200)
 
 # т╢нд╪Ч
 aux_source_directory(./src SOURCE_SRC)
