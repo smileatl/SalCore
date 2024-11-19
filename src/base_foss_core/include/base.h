@@ -71,14 +71,15 @@
 
 #include "base_platform.h"
 #include "base_types.h"
-#include "base_core.h"
-#include "base_core_db.h"
-#include "base_scheduler.h"
 #include "base_apr.h"
+#include "base_core_db.h"
+#include "base_core.h"
+#include "base_utils.h"
 #include "base_module_interfaces.h"
 
 #include "base_log.h"
 #include "base_xml.h"
+#include "base_scheduler.h"
 
 
 #endif

@@ -825,68 +825,6 @@ BASE_DECLARE(base_status_t) base_sockaddr_info_get(base_sockaddr_t ** sa, const 
     return fspr_sockaddr_info_get(sa, hostname, family, port, flags, pool);
 }
 
-BASE_DECLARE(base_status_t) base_sockaddr_new(base_sockaddr_t ** sa, const char *ip, base_port_t port, base_memory_pool_t *pool)
-{
-    base_status_t status = BASE_STATUS_SUCCESS;
-    fspr_sockaddr_t *new_sa;
-    int family;
-
-    if (!sa || !pool || !ip) {
-        base_goto_status(BASE_STATUS_GENERR, end);
-    }
-
-    new_sa = fspr_pcalloc(pool, sizeof(fspr_sockaddr_t));
-    base_assert(new_sa);
-
-    new_sa->pool = pool;
-
-#if APR_HAVE_IPV6
-    if (strchr(ip, ':')) {
-        struct sockaddr_in6 sa6 = { 0 };
-
-        family = APR_INET6;
-        inet_pton(family, ip, &(sa6.sin6_addr));
-        memcpy(&new_sa->sa, &sa6, sizeof(struct sockaddr_in6));
-    } else
-#endif
-    {
-        struct sockaddr_in sa4 = { 0 };
-
-        family = APR_INET;
-        inet_pton(family, ip, &(sa4.sin_addr));
-        memcpy(&new_sa->sa, &sa4, sizeof(struct sockaddr_in));
-    }
-
-    new_sa->hostname = fspr_pstrdup(pool, ip);
-    new_sa->family = family;
-    new_sa->sa.sin.sin_family = family;
-    if (port) {
-        /* XXX IPv6: assumes sin_port and sin6_port at same offset */
-        new_sa->sa.sin.sin_port = htons(port);
-        new_sa->port = port;
-    }
-
-    if (family == APR_INET) {
-        new_sa->salen = sizeof(struct sockaddr_in);
-        new_sa->addr_str_len = 16;
-        new_sa->ipaddr_ptr = &(new_sa->sa.sin.sin_addr);
-        new_sa->ipaddr_len = sizeof(struct in_addr);
-    }
-#if APR_HAVE_IPV6
-    else if (family == APR_INET6) {
-        new_sa->salen = sizeof(struct sockaddr_in6);
-        new_sa->addr_str_len = 46;
-        new_sa->ipaddr_ptr = &(new_sa->sa.sin6.sin6_addr);
-        new_sa->ipaddr_len = sizeof(struct in6_addr);
-    }
-#endif
-
-    *sa = new_sa;
-
-end:
-    return status;
-}
-
 BASE_DECLARE(base_status_t) base_socket_opt_set(base_socket_t *sock, int32_t opt, int32_t on)
 {
     if (opt == BASE_SO_TCP_KEEPIDLE) {

@@ -38,6 +38,7 @@
 
 
 #include <base.h>
+#include "private/base_core_pvt.h"
 #ifndef WIN32
 #include <base_private.h>
 #ifdef HAVE_SETRLIMIT
