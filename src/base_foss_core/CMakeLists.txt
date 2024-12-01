@@ -1,29 +1,34 @@
+ï»¿cmake_minimum_required(VERSION 3.10)
+
 project(base_foss_core)
 
+#åº“ç”Ÿæˆè·¯å¾„
 set(LIBRARY_OUTPUT_PATH ${base_srcdir}/out)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${LIBEDIT_CFLAGS}")
 
-# Îª Windows Æ½Ì¨Ìí¼Ó FREESWITCHCORE_EXPORTS Ô¤´¦ÀíÆ÷¶¨Òå
+include_directories(${base_srcdir}/base_foss_core)
+#include_directories(${base_srcdir}/thirdparty/apr/include)
+#include_directories(${base_srcdir}/thirdparty/apr/include/arch/win32)
+include_directories(${base_srcdir}/thirdparty/apr-trunk/include)
+include_directories(${base_srcdir}/thirdparty/apr-trunk/include/arch/win32)
+
+add_library(base_foss_core SHARED
+    "base.h"  
+    "base_platform.h"  
+    "base_types.h" 
+    "base_apr.h" 
+    "base_apr.cpp"
+    "base_util.h"
+    "base_util.cpp"
+    "base_core.h"
+	"base_core.cpp" )
+
+add_dependencies(base_foss_core libapr-2)
+target_link_libraries(base_foss_core ${base_srcdir}/out/libapr-2.lib)
+
+
+# ä¸º Windows å¹³å°æ·»åŠ  FREESWITCHCORE_EXPORTS é¢„å¤„ç†å™¨å®šä¹‰
 if(WIN32)
-    add_definitions(-FREESWITCHCORE_EXPORTS)
+    target_compile_definitions(base_foss_core PRIVATE FREEBASECORE_EXPORTS)
 endif()
 
-# include
-include_directories(./include)
-include_directories(${base_srcdir}/thirdparty/apr/include)
-include_directories(${base_srcdir}/thirdparty/apr/include/arch/win32)
-include_directories(${base_srcdir}/thirdparty/sqlite-autoconf-3150200)
-include_directories(${base_srcdir}/thirdparty/libteletone/src)
-
-# Ô´ÎÄ¼ş
-aux_source_directory(./src SOURCE_SRC)
-# Í·ÎÄ¼ş
-file(GLOB_RECURSE MOD_HEADERS  ./include/*.h)
-# ÔÚ¿ÉÊÓ»¯¹¤¾ßÖĞ´´½¨×Ô¶¨ÒåµÄÔ´ÎÄ¼ş×éÖ¯½á¹¹£¬¶ø²»ÊÇ°´ÕÕÊµ¼ÊÎÄ¼ş¼Ğ½á¹¹ÏÔÊ¾ÕâĞ©Í·ÎÄ¼ş¡£(¹¤³Ì±¾ÉíÒÑ¾­×éÖ¯ºÃÁË£¬ÎŞĞèÕâÃ´×ö)
-# source_group("include" FILES ${MOD_HEADERS})
-
-# Éú³É¿â
-if(CORE_BUILD_SHARED)
-    add_library(base_foss_core SHARED ${SOURCE_SRC} ${MOD_HEADERS})
-endif()
