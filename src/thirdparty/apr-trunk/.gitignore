@@ -136,10 +136,10 @@
 /hooks/.libs
 /hooks/*.lo
 /hooks/Makefile
-/include/apr.h
+#/include/apr.h
 /include/apr.h.save
 /include/apr_ldap.h
-/include/apu.h
+#/include/apu.h
 /include/apu_want.h
 /include/arch/unix/apr_private.h
 /include/arch/unix/apr_private.h.in
@@ -150,7 +150,7 @@
 /include/private/apu_private.h
 /include/private/apu_select_dbm.h
 /*.la
-/libapr.rc
+#/libapr.rc
 /LibD
 /LibNTD
 /LibNTR
@@ -221,7 +221,7 @@
 /random/unix/.libs
 /random/unix/*.lo
 /random/unix/Makefile
-/*.rc
+#/*.rc
 /Release
 /ReleaseNT
 /shmem/beos/.deps

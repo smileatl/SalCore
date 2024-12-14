@@ -1,21 +1,26 @@
-ï»¿# CMakeList.txt : CMake project for core_main, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
-#åº“ç”Ÿæˆè·¯å¾„
-include_directories(${base_srcdir}/base_foss_core)
-include_directories(${base_srcdir}/thirdparty/apr-trunk/include)
-include_directories(${base_srcdir}/thirdparty/apr-trunk/include/arch/win32)
+project(core_main)
 
-# Add source to this project's executable.
-add_executable (core_main "core_main.h" "core_main.cpp" )
-# æŒ‡å®š core_main ç›®æ ‡ä¾èµ–äº base_foss_core ç›®æ ‡ï¼Œè¿™æ„å‘³ç€åœ¨æ„å»º core_main ä¹‹å‰ï¼Œå¿…é¡»å…ˆæ„å»º base_foss_coreã€‚è¿™ä¸»è¦ç”¨äºç®¡ç†æ„å»ºé¡ºåºå’Œä¾èµ–å…³ç³»ï¼Œä½†ä¸ä¼šè‡ªåŠ¨é“¾æ¥åº“ã€‚
-#add_dependencies(core_main base_foss_core)
-# ä¸º Windows å¹³å°æ·»åŠ  FREESWITCHCORE_EXPORTS é¢„å¤„ç†å™¨å®šä¹‰
-# å°† base_foss_core åº“é“¾æ¥åˆ° core_main ç›®æ ‡ï¼Œç¡®ä¿ core_main åœ¨ç¼–è¯‘æ—¶é“¾æ¥åˆ° base_foss_core åº“ã€‚è¿™ä¸ä»…ç®¡ç†æ„å»ºé¡ºåºï¼Œè¿˜ç¡®ä¿é“¾æ¥å™¨é“¾æ¥åˆ°æ­£ç¡®çš„åº“ã€‚
-target_link_libraries(core_main ${base_srcdir}/out/base_foss_core.lib)
+# Í·ÎÄ¼ş
+include_directories(${base_srcdir}/core_main/include)
+include_directories(${base_srcdir}/core_base/include)
+#include_directories(${base_srcdir}/thirdparty/${libapr_dir}/include)
+#include_directories(${base_srcdir}/thirdparty/${libapr_dir}/include/arch/win32)
+file(GLOB_RECURSE SOURCE_HEAD  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h )
 
+# Ô´ÎÄ¼ş
+aux_source_directory(./src SOURCE_SRC)
 
+# Éú³É¿ÉÖ´ĞĞÎÄ¼ş
+add_executable(core_main ${SOURCE_SRC} ${SOURCE_HEAD})
+# Ö¸¶¨ core_main Ä¿±êÒÀÀµÓÚ core_base Ä¿±ê£¬ÕâÒâÎ¶×ÅÔÚ¹¹½¨ core_main Ö®Ç°£¬±ØĞëÏÈ¹¹½¨ core_base¡£ÕâÖ÷ÒªÓÃÓÚ¹ÜÀí¹¹½¨Ë³ĞòºÍÒÀÀµ¹ØÏµ£¬µ«²»»á×Ô¶¯Á´½Ó¿â¡£
+#add_dependencies(core_main core_base)
+# ½« core_base ¿âÁ´½Óµ½ core_main Ä¿±ê£¬È·±£ core_main ÔÚ±àÒëÊ±Á´½Óµ½ core_base ¿â¡£Õâ²»½ö¹ÜÀí¹¹½¨Ë³Ğò£¬»¹È·±£Á´½ÓÆ÷Á´½Óµ½ÕıÈ·µÄ¿â¡£
+target_link_libraries(core_main ${base_srcdir}/out/core_base.lib)
+
+# ÉèÖÃ¿ÉÖ´ĞĞÎÄ¼şµÄÊä³öÂ·¾¶
 set_target_properties(core_main PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${base_srcdir}/out"
 )
+
+
+

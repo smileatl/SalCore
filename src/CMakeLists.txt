@@ -1,24 +1,23 @@
-ï»¿# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
-#
-cmake_minimum_required (VERSION 3.8)
-# å…è®¸åœ¨ CMake è„šæœ¬ä¸­ä½¿ç”¨æ¾æ•£çš„å¾ªç¯ç»“æ„
+cmake_minimum_required(VERSION 3.8)
+# ÔÊĞíÔÚ CMake ½Å±¾ÖĞÊ¹ÓÃËÉÉ¢µÄÑ­»·½á¹¹
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
-# åœ¨ CMake ä¸­è®¾ç½® Microsoft Visual Studio ç¼–è¯‘å™¨çš„å¢é‡é“¾æ¥é€‰é¡¹ã€‚å¢é‡é“¾æ¥å¯ä»¥åŠ å¿«é“¾æ¥æ—¶é—´ï¼Œå› ä¸ºå®ƒåªé“¾æ¥æ›´æ”¹è¿‡çš„éƒ¨åˆ†ï¼Œè€Œä¸æ˜¯æ•´ä¸ªç¨‹åºã€‚
+# ÔÚ CMake ÖĞÉèÖÃ Microsoft Visual Studio ±àÒëÆ÷µÄÔöÁ¿Á´½ÓÑ¡Ïî¡£ÔöÁ¿Á´½Ó¿ÉÒÔ¼Ó¿ìÁ´½ÓÊ±¼ä£¬ÒòÎªËüÖ»Á´½Ó¸ü¸Ä¹ıµÄ²¿·Ö£¬¶ø²»ÊÇÕû¸ö³ÌĞò¡£
 SET(MSVC_INCREMENTAL_DEFAULT ON)
 
-
-project ("SalCore")
+project(SalCore)
 
 set(base_srcdir ${PROJECT_SOURCE_DIR})
 
-# Include sub-projects.
-add_subdirectory("base_foss_core")
-add_subdirectory ("core_main")
-add_subdirectory("MyLibraryProject")
-add_subdirectory("main")
-
+# µÚÈı·½¿âÄ¿Â¼±äÁ¿
+set(libapr_dir "apr-trunk")
+set(libarputil_dir "apr-util-1.7.x")
 option(BUILD_THIRDPARTY "Set when you want to build the thirdpart" ON)
+
+# µÚÈı·½¿â±àÒë
 if (BUILD_THIRDPARTY)
     add_subdirectory("thirdparty")
 endif(BUILD_THIRDPARTY)
+
+
+add_subdirectory(core_base)
+add_subdirectory(core_main)
