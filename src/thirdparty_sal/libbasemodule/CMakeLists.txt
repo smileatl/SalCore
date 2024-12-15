@@ -4,16 +4,16 @@ project(core_base)
 set(LIBRARY_OUTPUT_PATH ${base_srcdir}/out)
 
 # 头文件
-include_directories(${base_srcdir}/thirdparty_sal/libmodule/include)
+include_directories(${base_srcdir}/thirdparty_sal/libbasemodule/include)
 file(GLOB_RECURSE SOURCE_HEAD  ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 
 # 源文件
 aux_source_directory(./src SOURCE_SRC)
 
 # 生成动态库
-add_library(libmodule SHARED ${SOURCE_SRC} ${SOURCE_HEAD})
+add_library(libbasemodule SHARED ${SOURCE_SRC} ${SOURCE_HEAD})
 
 # 为 Windows 平台添加 BASELIB_EXPORTS 预处理器定义
 if(WIN32)
-    target_compile_definitions(libmodule PRIVATE MYLIBRARY_EXPORTS)
+    target_compile_definitions(libbasemodule PRIVATE MYLIBRARY_EXPORTS)
 endif()

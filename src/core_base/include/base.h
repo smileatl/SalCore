@@ -15,8 +15,26 @@
 #define BASELIB_API __declspec(dllimport)
 #endif
 
+#include <stdlib.h>
 #include <stdio.h>
-#include "base_config.h"
+#include <stdarg.h>
+#include <stddef.h>
+#include <assert.h>
+#include <setjmp.h>
+#include <ctype.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <limits.h>
+#include <sys/types.h>
+#include <time.h>
+#include <signal.h>
+#include <errno.h>
+#include <math.h>
+
+#include "base_types.h"
+#include "base_strfuncs.h"
+#include "base_module.h"
 
 BASELIB_API void sayHello();
 
