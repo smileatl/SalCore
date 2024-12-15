@@ -1,7 +1,7 @@
-//#include "core_main.h"
+#include "core_main.h"
 #include <base.h>
 
 int main(int argc, char* argv[]) {
-    //sayHello();
+    sayHello();
     return 0;
 }

@@ -1,8 +1,6 @@
 #ifndef BASE_CONFIG_H
 #define BASE_CONFIG_H
 
-#include <apr.h>
-
 BASE_BEGIN_EXTERN_C
 
 /**

@@ -6,18 +6,26 @@ SET(MSVC_INCREMENTAL_DEFAULT ON)
 
 project(SalCore)
 
+# 项目基础路径
 set(base_srcdir ${PROJECT_SOURCE_DIR})
-
 # 第三方库目录变量
 set(libapr_dir "apr-trunk")
 set(libarputil_dir "apr-util-1.7.x")
+
+# 第三方库
 option(BUILD_THIRDPARTY "Set when you want to build the thirdpart" ON)
+# 自己写的第三方库
+option(BUILD_THIRDPARTY_SAL "Set when you want to build the thirdpart" ON)
+
 
 # 第三方库编译
 if (BUILD_THIRDPARTY)
     add_subdirectory("thirdparty")
 endif(BUILD_THIRDPARTY)
-
+# 自己的第三方库编译
+if (BUILD_THIRDPARTY_SAL)
+    add_subdirectory("thirdparty_sal")
+endif(BUILD_THIRDPARTY_SAL)
 
 add_subdirectory(core_base)
 add_subdirectory(core_main)

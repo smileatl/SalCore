@@ -16,6 +16,7 @@
 #endif
 
 #include <stdio.h>
+#include "base_config.h"
 
 BASELIB_API void sayHello();
 
