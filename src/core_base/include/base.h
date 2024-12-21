@@ -33,9 +33,13 @@
 #include <math.h>
 
 #include "base_types.h"
-#include "base_strfuncs.h"
-#include "base_module.h"
+#include "base_apr.h"
+#include "base_directory.h"
+
+BASE_BEGIN_EXTERN_C
 
 BASELIB_API void sayHello();
+
+BASE_END_EXTERN_C
 
 #endif // BASE_H

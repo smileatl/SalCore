@@ -1,7 +1,10 @@
-#include "core_main.h"
 #include <base.h>
+//#include <iostream>
+
+#include "core_main.h"
 
 int main(int argc, char* argv[]) {
     sayHello();
+    base_apr_initialize();
     return 0;
 }
