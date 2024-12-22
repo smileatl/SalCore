@@ -15,6 +15,14 @@
 #define BASELIB_API __declspec(dllimport)
 #endif
 
+#ifndef PLUGIN_API
+  #ifdef WIN32
+    #define PLUGIN_API __declspec(dllimport)
+  #else
+    #define PLUGIN_API
+  #endif
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -33,8 +41,13 @@
 #include <math.h>
 
 #include "base_types.h"
+#include "base_util.h"
 #include "base_apr.h"
+#include "base_path.h"
 #include "base_directory.h"
+#include "base_plugin.h"
+#include "base_plugin_manager.h"
+#include "base_object_adapter.h"
 
 BASE_BEGIN_EXTERN_C
 

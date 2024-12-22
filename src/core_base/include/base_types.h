@@ -39,6 +39,7 @@ typedef enum {
 
 typedef int32_t         base_int32_t;
 typedef uint32_t        base_uint32_t;
+typedef size_t          base_size_t;
 
 typedef unsigned char   base_byte_t;
 
