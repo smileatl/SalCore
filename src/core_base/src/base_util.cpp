@@ -2,6 +2,10 @@
 #include <apr.h>
 #include <apr_errno.h>
 
+namespace base
+{
+
+
 std::string getErrorMessage()
 {
     char buff[1024];
@@ -9,3 +13,7 @@ std::string getErrorMessage()
     apr_strerror(st , buff, 1024);
     return std::string(buff);
 }
+
+
+}
+

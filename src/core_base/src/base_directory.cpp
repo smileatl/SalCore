@@ -12,4 +12,29 @@
   #include <sys/stat.h>
 #endif
 
+namespace Directory
+{
+
+bool exists(const std::string & path)
+{
+    return Path::exists(path);
+}
+
+std::string getCWD()
+  {
+    char cwd[APR_PATH_MAX];
+  #ifdef WIN32
+    DWORD res = ::GetCurrentDirectoryA(APR_PATH_MAX, cwd);
+    CHECK(res > 0) << "Couldn't get current working directory. Error code: " 
+      << base::getErrorMessage();
+  #else
+    cwd[0] = '\0';
+    char * res = ::getcwd(cwd, APR_PATH_MAX);
+    CHECK(res != NULL) << "Couldn't get current working directory. Error code: " << errno;
+    
+  #endif
+    return std::string(cwd);
+  }
+
+}
 

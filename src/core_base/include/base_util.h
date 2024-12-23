@@ -64,6 +64,13 @@ private:
   #define ASSERT(condition) {}
 #endif // DEBUG
 
+
+namespace base
+{
+
 std::string getErrorMessage();
+
+}
+
 
 #endif // BASE_UTIL_H

@@ -11,7 +11,7 @@
 
 class Path;
 
-namespace directory
+namespace Directory
 {
 // check if a directory exists
 bool exists(const std::string & path);

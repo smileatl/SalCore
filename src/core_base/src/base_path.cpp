@@ -56,7 +56,7 @@ static apr_filetype_e getType(const std::string & path)
     apr_finfo_t st;
     base_status_t res = getInfo(path, APR_FINFO_TYPE, st);
     CHECK(res == BASE_STATUS_SUCCESS) 
-        << "Can't get info for '" << path << "', " << getErrorMessage();
+        << "Can't get info for '" << path << "', " << base::getErrorMessage();
   
     return st.filetype;
 }
@@ -104,3 +104,111 @@ bool Path::areEquivalent(const std::string & path1, const std::string & path2)
   return res;
 }
 
+std::string Path::getParent(const std::string & path)
+{
+  Path::StringVec sv;
+  Path::split(path, sv);
+  std::string root;
+  if (path[0] == '/') {
+      root = "/";
+  }
+  return root + Path::join(sv.begin(), sv.end()-1);
+}
+
+std::string Path::getBasename(const std::string & path)
+{
+  std::string::size_type index = path.find_last_of(Path::sep);
+  
+  if (index == std::string::npos)
+    return path;
+  
+  return std::string(path.c_str() + index + 1, index);
+}
+
+std::string Path::getExtension(const std::string & path)
+{
+  std::string filename = Path::getBasename(path);
+  std::string::size_type index = filename.find_last_of('.');
+  
+  // If its a  regular or hidden filenames with no extension
+  // return an empty string
+  if (index == std::string::npos ||  // regular filename with no ext 
+      index == 0                 ||  // hidden file (starts with a '.')
+      index == path.size() -1)       // filename ends with a dot
+    return "";
+  
+  // Don't include the dot, just the extension itself (unlike Python)
+  return filename.substr(index + 1);
+}
+
+apr_size_t Path::getFileSize(const std::string & path)
+{
+  apr_finfo_t st;
+  apr_int32_t wanted = APR_FINFO_TYPE | APR_FINFO_SIZE;
+  getInfo(path.c_str(), wanted, st);
+  CHECK(st.filetype == APR_REG) << "Can't get the size of a non-file object";
+  
+  return (apr_size_t)st.size;
+}
+
+std::string Path::normalize(const std::string & path)
+{
+  return path;
+}
+
+void Path::split(const std::string& path, StringVec& parts)
+{
+    std::istringstream iss(path);
+    std::string token;
+    char sep_char = Path::sep[0]; // 转换为单个字符
+    while (std::getline(iss, token, sep_char)) {
+        parts.push_back(token);
+    }
+}
+
+std::string Path::makeAbsolute(const std::string & path)
+{
+  if (Path::isAbsolute(path))
+    return path;
+    
+  std::string cwd = Directory::getCWD();
+  // If its already absolute just return the original path
+  if (::strncmp(cwd.c_str(), path.c_str(), cwd.length()) == 0) 
+    return path;
+  
+  // Get rid of trailing separators if any
+  if (path.find_last_of(Path::sep) == path.length() - 1)
+  {
+    cwd = std::string(cwd.c_str(), cwd.length()-1);
+  }
+  // join the cwd to the path and return it (handle duplicate separators) 
+  std::string result = cwd;
+  if (path.find_first_of(Path::sep) == 0)
+  {
+    return cwd + path;
+  }
+  else
+  {
+    return cwd + Path::sep + path;
+  }
+  
+  return "";
+}
+
+std::string Path::join(StringVec::iterator begin, StringVec::iterator end)
+{
+  // Need to get rid of redundant separators
+
+  if (begin == end)
+    return "";
+    
+  std::string path(*begin++);
+  
+  while (begin != end)
+  {
+    path += Path::sep;
+    path += *begin++;
+  };
+  
+  return path;
+}
