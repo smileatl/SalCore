@@ -212,3 +212,21 @@ std::string Path::join(StringVec::iterator begin, StringVec::iterator end)
   
   return path;
 }
+
+void Path::copy(const std::string& source, const std::string& destination)
+{
+    CHECK(!source.empty()) 
+    << "Can't copy from an empty source";
+
+  CHECK(!destination.empty()) 
+    << "Can't copy to an empty destination";
+
+  CHECK(source != destination)
+    << "Source and destination must be different";
+
+  if (isDirectory(source))
+  {
+    Directory::copyTree(source, destination);
+    return;
+  } 
+}

@@ -47,7 +47,7 @@ class Iterator
 {
 public:
 
-    Iterator(const Path & path);    
+    Iterator(const Path & path);
     Iterator(const std::string & path);
     ~Iterator();
 
@@ -57,7 +57,7 @@ public:
     // get next directory entry
     Entry * next(Entry & e);
 
-    private:
+private:
     Iterator();
     Iterator(const Iterator &);
 
