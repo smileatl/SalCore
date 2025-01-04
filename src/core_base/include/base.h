@@ -45,9 +45,11 @@
 #include "base_apr.h"
 #include "base_path.h"
 #include "base_directory.h"
+#include "base_dynamic_library.h"
 #include "base_plugin.h"
 #include "base_plugin_manager.h"
 #include "base_object_adapter.h"
+#include "base_plugin_manager_api.h"
 
 BASE_BEGIN_EXTERN_C
 

@@ -3,8 +3,10 @@ project(core_base)
 #库生成路径
 set(LIBRARY_OUTPUT_PATH ${base_srcdir}/out)
 
+# 添加编译选项
 add_definitions(-DWIN32)
 add_definitions(-DBASELIB_EXPORTS)
+add_definitions(-DPF_PLATFORM_WINDOWS)
 
 
 # 头文件

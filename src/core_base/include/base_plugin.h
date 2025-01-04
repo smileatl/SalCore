@@ -17,13 +17,13 @@ typedef enum Base_ProgrammingLanguage
     Base_ProgrammingLanguage_CPP,
 } Base_ProgrammingLanguage;
 
-struct Base_PlatformServices_;
+struct Base_PlatformServices;
 
 // 一个抽象结构，在创建插件对象时被传入。
 typedef struct Base_ObjectParams
 {
     const base_byte_t * objectType;
-    const struct Base_PlatformServices_ * platformServices;
+    const struct Base_PlatformServices * platformServices;
 } Base_ObjectParams;
 
 // 指明版本信息。这有助于插件管理器只加载兼容版本的插件。

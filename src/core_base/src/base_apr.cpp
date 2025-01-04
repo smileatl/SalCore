@@ -24,6 +24,11 @@ BASELIB_API void base_apr_initialize(void)
     apr_initialize();
 }
 
+BASELIB_API void base_apr_terminate(void)
+{
+    apr_terminate();
+}
+
 BASELIB_API base_status_t base_pool_create(base_pool_t** newpool, base_pool_t* parent)
 {
     apr_status_t apr_status =  apr_pool_create(newpool, parent);

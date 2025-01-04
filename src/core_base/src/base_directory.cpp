@@ -4,6 +4,7 @@
 //#include "base_path.h"
 //#include "base_directory.h"
 #include <apr_file_io.h>
+#include <apr_file_info.h>
 
 #ifdef WIN32
   #include <windows.h>
@@ -70,6 +71,63 @@ std::string getCWD()
     createSingleDir(p.c_str());
   }
 
+  
+
+void Iterator::init(const std::string& path)
+{
+    std::string absolutePath = Path::makeAbsolute(path);
+    #ifdef PF_PLATFORM_LINUX
+    handle_ = ::opendir(absolutePath.c_str());
+    CHECK(handle_) << "Can't open directory " << path
+                   << ". Error code: "    << errno;
+
+  #else
+    apr_status_t res = apr_pool_create(&pool_, NULL);
+    CHECK(res == 0) << "Can't create pool";
+    res = ::apr_dir_open(&handle_, absolutePath.c_str(), pool_);
+    CHECK(res == 0) << "Can't open directory " << path
+                    << ". Error code: " << APR_TO_OS_ERROR(res);
+
+  #endif
+}
+
+Iterator::Iterator(const Path & path)
+  {
+    init(std::string(path));
+  }
+
+  Iterator::Iterator(const std::string & path) : handle_(NULL)
+  {
+    init(path);
+  }
+
+  Iterator::~Iterator()
+  {
+  #ifdef PF_PLATFORM_LINUX
+    int res = ::closedir(handle_);
+    CHECK(res == 0) << "Couldn't close directory." 
+                    << " Error code: " << errno;
+  #else
+    apr_status_t res = ::apr_dir_close(handle_);
+    apr_pool_destroy(pool_);
+    CHECK(res == 0) << "Couldn't close directory." 
+                    << " Error code: " << APR_TO_OS_ERROR(res);
+  #endif
+  
+    
+  }
+
+  void Iterator::reset()
+  {
+  #ifdef PF_PLATFORM_LINUX
+    ::rewinddir(handle_);
+  #else
+    apr_status_t res = ::apr_dir_rewind(handle_);
+    CHECK(res == 0) 
+      << "Couldn't reset directory iterator." 
+      << " Error code: " << APR_TO_OS_ERROR(res);
+  #endif
+  }
 
 void copyTree(const std::string& source, const std::string& destination)
 {
@@ -81,10 +139,105 @@ void copyTree(const std::string& source, const std::string& destination)
       Directory::create(dest);
     }
     CHECK(Path::isDirectory(dest));
-    //Iterator i(source);
+    Iterator i(source);
     Entry e;
+    while (i.next(e))
+    {
+      std::string fullSource(source);
+      fullSource += e.path;
+      Path::copy(fullSource, dest);
+    }
 }
 
 
+#ifdef PF_PLATFORM_LINUX  
+  Entry * Iterator::next(Entry & e)
+  {
+    errno = 0;
+    struct dirent * p = ::readdir(handle_);
+    CHECK(!errno) << "Couldn't read next dir entry." 
+                  << " Error code: " << errno;
+    
+    if (!p)
+      return NULL;
+    
+    e.type = (p->d_type == DT_DIR) ? Directory::Entry::DIRECTORY 
+                                   : Directory::Entry::FILE;
+    
+    e.path = std::string(p->d_name);                               
+
+    // Skip '.' and '..' directories
+    if (e.type == Directory::Entry::DIRECTORY && 
+       (e.path == std::string(".") || e.path == std::string("..")))
+      return next(e);
+    else
+      return &e;
+  }
+  
+#else  
+  Entry * Iterator::next(Entry & e)
+  {
+    apr_int32_t wanted = APR_FINFO_LINK | APR_FINFO_NAME | APR_FINFO_TYPE;
+    apr_status_t res = ::apr_dir_read(e.finfo, wanted, handle_);
+    
+    // No more entries
+    if (APR_STATUS_IS_ENOENT(res))
+      return NULL;
+      
+    if (res != 0)
+    {
+      CHECK(res == APR_INCOMPLETE) 
+        << "Couldn't read next dir entry." 
+        << " Error code: " << APR_TO_OS_ERROR(res);
+      CHECK(((e.finfo->valid & wanted) | APR_FINFO_LINK) == wanted) 
+        << "Couldn't retrieve all fields. Valid mask=" << e.finfo->valid; 
+    } 
+
+    
+    e.type = (e.finfo->filetype == APR_DIR) ? Directory::Entry::DIRECTORY 
+                                       : Directory::Entry::FILE;
+    e.path = e.finfo->name;                               
+
+    // Skip '.' and '..' directories
+    if (e.type == Directory::Entry::DIRECTORY && 
+       (e.finfo->name == std::string(".") || e.finfo->name == std::string("..")))
+      return next(e);
+    else
+      return &e;
+  }
+#endif
+
+  static void removeEmptyDir(const std::string & path)
+  {
+    int res = 0;
+  #ifdef WIN32
+    res = ::RemoveDirectoryA(path.c_str()) ? 0 : -1;
+  #else
+    res = ::rmdir(path.c_str());
+  #endif
+    CHECK(res == 0) << base::getErrorMessage();
+  }
+
+  void removeTree(const std::string& path)
+{
+    CHECK(!path.empty()) << "Can't remove directory with no name";
+    Iterator i(path);
+    Entry e;
+    while (i.next(e))
+    {
+       Path fullPath = Path(path) + Path(e.path);
+      if (e.type == Entry::DIRECTORY)
+        removeTree(std::string(fullPath));
+      else
+      {
+        apr_status_t st = ::apr_file_remove(fullPath, NULL);
+        CHECK(st == APR_SUCCESS) << base::getErrorMessage();
+      }
+    }
+    removeEmptyDir(path);
 }
+
+}
+
+
 

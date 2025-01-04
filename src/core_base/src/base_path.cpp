@@ -22,6 +22,20 @@ Path::Path(const std::string & path) : path_(path)
 {
 }
 
+Path::operator const char *() const
+{
+  return path_.c_str();
+}
+
+Path & Path::operator+=(const Path & path)
+{
+  Path::StringVec sv;
+  sv.push_back(std::string(path_));
+  sv.push_back(std::string(path.path_));
+  path_ = Path::join(sv.begin(), sv.end());
+  return *this;
+}
+
 static base_status_t getInfo(const std::string& path, base_int32_t wanted, base_finfo_t& info)
 {
     CHECK(!path.empty()) << "Can't get the info of an empty path";
@@ -228,5 +242,143 @@ void Path::copy(const std::string& source, const std::string& destination)
   {
     Directory::copyTree(source, destination);
     return;
+  }
+
+#ifdef WIN32
+  // This will overwrite quitely destination file if exist
+  BOOL res = ::CopyFile(LPTSTR(source.c_str()), LPTSTR(destination.c_str()), FALSE);
+  CHECK(res != FALSE) << base::getErrorMessage();
+#else
+
+  try
+  {
+    std::ifstream  in(source.c_str());
+    std::ofstream  out(destination.c_str()); 
+    in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    out.exceptions(std::ofstream::failbit | std::ofstream::badbit);
+    out << in.rdbuf();
+  }
+  catch (...)
+  {
+    // Should I do it? maybe just let the standard exception propagate on its own?
+    THROW << "Path::copy() failed. " << base::getErrorMessage();
+  }
+#endif
+}
+
+void Path::remove(const std::string& path)
+{
+    CHECK(!path.empty()) 
+    << "Can't remove an empty path";
+
+    // Just return if it doesn't exist already
+  if (!Path::exists(path))
+    return;
+
+  if (isDirectory(path))
+  {
+    Directory::removeTree(path);
+    return;
   } 
+}
+
+void Path::rename(const std::string & oldPath, const std::string & newPath)
+{
+  CHECK(!oldPath.empty() && !newPath.empty()) 
+    << "Can't rename to/from empty path";
+#ifdef WIN32
+  BOOL res = ::MoveFile(LPTSTR(oldPath.c_str()), LPTSTR(newPath.c_str()));
+  CHECK(res != FALSE) << base::getErrorMessage();
+#else
+  int res = ::rename(oldPath.c_str(), newPath.c_str());
+  CHECK(res != -1) << base::getErrorMessage();
+#endif
+}
+
+Path Path::getParent() const
+{
+  return Path::getParent(path_);
+}
+
+Path Path::getBasename() const
+{
+  return Path::getBasename(path_);
+}
+
+Path Path::getExtension() const
+{
+  return Path::getExtension(path_); 
+}
+
+apr_size_t Path::getFileSize() const
+{
+  return Path::getFileSize(path_); 
+}
+
+Path & Path::normalize()
+{
+  path_ = Path::normalize(path_);
+  return *this;
+}
+
+bool Path::isAbsolute() const
+{
+  return Path::isAbsolute(path_);
+}
+
+Path & Path::makeAbsolute()
+{
+    if (!isAbsolute()) {
+        path_ = Path::makeAbsolute(path_);
+    }
+  return *this;
+}
+
+void Path::split(StringVec & parts) const
+{
+  Path::split(path_, parts);
+}
+
+void Path::remove() const
+{
+  Path::remove(path_);
+}
+
+void Path::rename(const std::string & newPath)
+{
+  Path::rename(path_, newPath);
+  path_ = newPath;
+}
+
+bool Path::isDirectory() const
+{
+  return Path::isDirectory(path_);
+}
+
+bool Path::isFile() const
+{
+  return Path::isFile(path_);
+}
+
+bool Path::isSymbolicLink() const
+{
+  return Path::isSymbolicLink(path_);
+}
+
+bool Path::exists() const
+{
+  return Path::exists(path_);
+}
+
+bool Path::isEmpty() const
+{
+  return path_.empty();
+}
+
+Path operator+(const Path & p1, const Path & p2)
+{
+  Path::StringVec sv;
+  sv.push_back(std::string(p1));
+  sv.push_back(std::string(p2));
+  return Path::join(sv.begin(), sv.end());
 }
