@@ -6,9 +6,12 @@
 #ifndef BASE_PLUGIN_H
 #define BASE_PLUGIN_H
 
-#include "base.h"
+//#include "base.h"
+#include "base_types.h"
 
-BASE_BEGIN_EXTERN_C
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // 该枚举类型允许插件告诉插件管理器，它本身是由 C 还是 C++ 实现的。
 typedef enum Base_ProgrammingLanguage
@@ -83,7 +86,8 @@ PLUGIN_API Base_ExitFunc Base_initPlugin(const Base_PlatformServices * params);
 // 静态插件的初始化过程有所不同。它们必须由主程序显式地进行初始化，也就是通过Base_InitFunc调用其初始化函数。
 // 这实际是不好的设计，因为如果要新增或者删除静态插件，主应用的代码都必须修改，并且那些不同名字的init函数都必须能够找到。
 
-
-BASE_END_EXTERN_C
+#ifdef  __cplusplus
+}
+#endif
 
 #endif // BASE_PLUGIN_H

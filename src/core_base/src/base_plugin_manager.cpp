@@ -31,6 +31,7 @@ PluginManager::PluginManager() : inInitializePlugin_(false)
   platformServices_.registerObject = registerObject;
 }
 
+// 析构插件管理器时，会调用插件的exit function
 PluginManager::~PluginManager()
 {
   // Just in case it wasn't called earlier

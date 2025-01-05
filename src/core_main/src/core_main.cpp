@@ -1,4 +1,7 @@
-#include <base.h>
+#include "base.h"
+#include "static_plugin.h"
+#include "cpp_plugin.h"
+#include "c_plugin.h"
 #include <iostream>
 #include <string>
 
@@ -34,7 +37,13 @@ int main(int argc, char* argv[]) {
     // 赋值一个函数指针
     setInvokeService(pm, DummyInvokeService);
 
+    //hello();
 
+    // 加载静态插件
+    int a = initializeStaticPlugin(pm, StaticPlugin_InitPlugin);
+
+    helloCppPlugin();
+    helloCPlugin();
 
     destroyPluginManager(pm);
 

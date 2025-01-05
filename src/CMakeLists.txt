@@ -29,3 +29,10 @@ endif(BUILD_THIRDPARTY_SAL)
 
 add_subdirectory(core_base)
 add_subdirectory(core_main)
+# add_subdirectory允许使用多级目录
+add_subdirectory(base/static_plugin)
+add_subdirectory(base/cpp_dynamic_plugin)
+add_subdirectory(base/c_dynamic_plugin)
+
+
+

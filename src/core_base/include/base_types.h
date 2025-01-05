@@ -1,10 +1,12 @@
 #ifndef BASE_TYPES_H
 #define BASE_TYPES_H
 
-#include "base.h"
+//#include "base.h"
 #include <stdint.h>
 
-BASE_BEGIN_EXTERN_C
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum {
     BASE_STATUS_SUCCESS,
@@ -43,7 +45,9 @@ typedef size_t          base_size_t;
 
 typedef unsigned char   base_byte_t;
 
-BASE_END_EXTERN_C
+#ifdef  __cplusplus
+}
+#endif
 
 
 #endif // BASE_TYPES_H

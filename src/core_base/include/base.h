@@ -9,11 +9,11 @@
 #define BASE_END_EXTERN_C
 #endif
 
-#ifdef BASELIB_EXPORTS
-#define BASELIB_API __declspec(dllexport)
-#else
-#define BASELIB_API __declspec(dllimport)
-#endif
+//#ifdef BASELIB_EXPORTS
+//#define BASELIB_API __declspec(dllexport)
+//#else
+//#define BASELIB_API __declspec(dllimport)
+//#endif
 
 #ifndef PLUGIN_API
   #ifdef WIN32
@@ -22,6 +22,13 @@
     #define PLUGIN_API
   #endif
 #endif
+//#ifdef WIN32
+//#ifdef PLUGIN_EXPORTS
+//#define PLUGIN_API __declspec(dllexport)
+//#else
+//#define PLUGIN_API __declspec(dllimport)
+//#endif
+//#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,7 +38,6 @@
 #include <setjmp.h>
 #include <ctype.h>
 #include <fcntl.h>
-#include <string.h>
 #include <sys/stat.h>
 #include <limits.h>
 #include <sys/types.h>
@@ -40,6 +46,7 @@
 #include <errno.h>
 #include <math.h>
 
+#include "base_platform.h"
 #include "base_types.h"
 #include "base_util.h"
 #include "base_apr.h"
