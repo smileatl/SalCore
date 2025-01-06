@@ -39,7 +39,10 @@ struct Entry
     Type type;
     std::string path;
 #ifndef PF_PLATFORM_LINUX
-    apr_finfo_t* finfo;
+    apr_finfo_t* finfo; // 这种指针需要构造时初始化，析构时释放
+
+    Entry();
+    ~Entry();
 #endif
 };
 
@@ -67,8 +70,8 @@ private:
     #ifdef PF_PLATFORM_LINUX
     DIR * handle_;
     #else
-    apr_dir_t * handle_;
-    apr_pool_t * pool_;
+    apr_dir_t * handle_; // 这种指针需要构造时初始化，析构时释放
+    apr_pool_t * pool_; // 这种指针需要构造时初始化，析构时释放
     #endif    
 };
 

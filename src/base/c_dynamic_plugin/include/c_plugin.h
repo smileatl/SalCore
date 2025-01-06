@@ -8,6 +8,10 @@
 //#endif
 #include "base_platform.h"
 
+BASE_BEGIN_EXTERN_C
+
 BASELIB_API void helloCPlugin(void);
+
+BASE_END_EXTERN_C
 
 //BASELIB_API void helloCPlugin();

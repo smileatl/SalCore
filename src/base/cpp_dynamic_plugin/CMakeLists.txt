@@ -6,6 +6,7 @@ set(LIBRARY_OUTPUT_PATH ${base_srcdir}/out)
 # ÃÌº”±‡“Î—°œÓ
 add_definitions(-DWIN32)
 add_definitions(-DBASELIB_EXPORTS)
+add_definitions(-DPLUGIN_EXPORTS)
 add_definitions(-DPF_PLATFORM_WINDOWS)
 
 

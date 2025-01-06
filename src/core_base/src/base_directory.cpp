@@ -16,6 +16,16 @@
 namespace Directory
 {
 
+Entry::Entry() : finfo(new apr_finfo_t)
+{
+    
+}
+
+Entry::~Entry()
+{
+    delete finfo;
+}
+
 bool exists(const std::string & path)
 {
     return Path::exists(path);

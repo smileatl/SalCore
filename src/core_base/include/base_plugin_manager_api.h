@@ -24,6 +24,8 @@ BASELIB_API int initializeStaticPlugin(PluginManagerHandle handle, Base_InitFunc
 // …Ë÷√invoke∫Ø ˝÷∏’Î
 BASELIB_API void setInvokeService(PluginManagerHandle handle, Base_InvokeServiceFunc invokeServiceFunc);
 
+BASELIB_API void base_core_runtime_loop(bool backend);
+
 BASE_END_EXTERN_C
 
 #endif // BASE_PLUGIN_MANAGER_API_H

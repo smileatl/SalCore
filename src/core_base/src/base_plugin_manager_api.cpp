@@ -1,4 +1,12 @@
 #include "base.h"
+#ifdef _WIN32
+#include <windows.h>
+#include <process.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
+#endif
 
 BASE_BEGIN_EXTERN_C
 
@@ -24,7 +32,7 @@ BASELIB_API int loadAllPlugins(PluginManagerHandle handle, const char* pluginsDi
         return -1;
     }
 
-    return static_cast<PluginManager*>(handle)->loadAll(pluginsDir);
+    return static_cast<PluginManager*>(handle)->loadAll(Path::makeAbsolute(pluginsDir));
 }
 
 BASELIB_API int initializeStaticPlugin(PluginManagerHandle handle, Base_InitFunc initFunc)
@@ -47,5 +55,33 @@ BASELIB_API void setInvokeService(PluginManagerHandle handle, Base_InvokeService
 
 }
 
+BASELIB_API void base_core_runtime_loop(bool backend)
+{
+#ifdef WIN32
+    HANDLE shutdown_event;
+    char path[256] = "";
+#endif
+    if (backend) { // 后台程序
+#ifdef WIN32
+        snprintf(path, sizeof(path), "Global\\SalCore.%d", _getpid()); // 生成一个全局命名的事件对象路径。
+        shutdown_event = CreateEvent(NULL, FALSE, FALSE, path); // 创建一个事件对象
+        if (shutdown_event) {
+            WaitForSingleObject(shutdown_event, INFINITE); // 等待事件对象被触发，超时时间为 INFINITE，表示无限等待。
+        }
+#else 
+        ;
+#endif
+    } else {
+        char input[256];
+        while (1) {
+            printf("Enter command: ");
+            if (fgets(input, sizeof(input), stdin) == NULL) {
+                break;
+            }
+            printf("You entered: %s", input);
+        }; // 前台程序
+    }
+
+}
 
 BASE_END_EXTERN_C

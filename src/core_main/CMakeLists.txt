@@ -1,5 +1,12 @@
 project(core_main)
 
+# 添加调试信息
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+
+add_definitions(-DWIN32)
+add_definitions(-D_DEBUG)
+add_definitions(-D_CONSOLE)
+
 # 头文件
 include_directories(${base_srcdir}/core_main/include)
 include_directories(${base_srcdir}/core_base/include)
@@ -25,10 +32,11 @@ target_link_libraries(core_main
     ${base_srcdir}/out/c_dynamic_plugin.lib
 )
 
+# 清空子系统设置
+set(CMAKE_EXE_LINKER_FLAGS "")
+
 # 设置可执行文件的输出路径
 set_target_properties(core_main PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${base_srcdir}/out"
 )
-
-
 

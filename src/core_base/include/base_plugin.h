@@ -8,6 +8,7 @@
 
 //#include "base.h"
 #include "base_types.h"
+#include "base_platform.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +73,15 @@ typedef base_int32_t (*Base_ExitFunc)();
 
 // 插件初始化的函数指针。
 typedef Base_ExitFunc (*Base_InitFunc)(const Base_PlatformServices *);
+
+
+//#ifndef PLUGIN_API
+//  #ifdef WIN32
+//    #define PLUGIN_API __declspec(dllimport)
+//  #else
+//    #define PLUGIN_API
+//  #endif
+//#endif
 
 // 动态插件（也就是通过动态链接库或者共享库部署的插件）初始化函数的实际声明。
 // 它由动态插件暴露出，所以插件管理器可以在加载插件时进行调用。

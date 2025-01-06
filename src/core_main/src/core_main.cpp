@@ -6,6 +6,9 @@
 #include <string>
 
 #include "core_main.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 base_int32_t DummyInvokeService(const base_byte_t* serviceName, void* serviceParams)
 {
@@ -15,6 +18,8 @@ base_int32_t DummyInvokeService(const base_byte_t* serviceName, void* servicePar
 int main(int argc, char* argv[]) {
     sayHello();
     std::cout << "Hello SalCore!" << std::endl;
+
+    bool backend = false; // 是否是后台程序
     
 
     ////检测输入参数的个数
@@ -37,16 +42,28 @@ int main(int argc, char* argv[]) {
     // 赋值一个函数指针
     setInvokeService(pm, DummyInvokeService);
 
-    //hello();
-
+    // 加载动态插件
+    loadAllPlugins(pm, "dll");
     // 加载静态插件
     int a = initializeStaticPlugin(pm, StaticPlugin_InitPlugin);
 
     helloCppPlugin();
     helloCPlugin();
 
-    destroyPluginManager(pm);
 
+    // 是否是后台程序
+    if (backend) {
+#ifdef WIN32
+        FreeConsole(); // 后台程序则关闭console
+#else
+        ;
+#endif 
+    }
+
+
+    base_core_runtime_loop(backend);
+
+    destroyPluginManager(pm);
     base_apr_terminate();
 
     return 0;

@@ -33,6 +33,8 @@ add_subdirectory(core_main)
 add_subdirectory(base/static_plugin)
 add_subdirectory(base/cpp_dynamic_plugin)
 add_subdirectory(base/c_dynamic_plugin)
+add_subdirectory(core_test)
+
 
 
 
