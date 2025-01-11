@@ -6,9 +6,9 @@
 class KillerBunny
 {
 public:
-  // static plugin interface
-    static void * create(Base_ObjectParams *); 
-    static base_int32_t destroy(void *);
+    // static plugin interface
+    static void* create(Base_ObjectParams*);
+    static base_int32_t destroy(void*);
     ~KillerBunny();
 
 private:

@@ -34,12 +34,12 @@ PLUGIN_API Base_ExitFunc Base_initPlugin(const Base_PlatformServices* params)
     rp.destroyFunc = MellowMonster_destroy;
     rp.programmingLanguage = Base_ProgrammingLanguage_C;
 
-    res = params->registerObject((const base_byte_t *)"MellowMonster", &rp);
-    if (res < 0)
+    res = params->registerObject((const base_byte_t*)"MellowMonster", &rp);
+    if (res < 0) {
         return NULL;
+    }
 
     return ExitFunc;
-
 }
 
 BASE_END_EXTERN_C

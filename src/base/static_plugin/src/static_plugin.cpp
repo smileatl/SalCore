@@ -10,7 +10,7 @@ base_int32_t StaticPlugin_ExitFunc()
     return 0;
 }
 
-Base_ExitFunc StaticPlugin_InitPlugin(const Base_PlatformServices * params)
+Base_ExitFunc StaticPlugin_InitPlugin(const Base_PlatformServices* params)
 {
     std::cout << "hello, StaticPlugin_InitPlugin" << std::endl;
 
@@ -23,7 +23,7 @@ Base_ExitFunc StaticPlugin_InitPlugin(const Base_PlatformServices * params)
     // Regiater FidgetyPhantom
     rp.createFunc = FidgetyPhantom::create;
     rp.destroyFunc = FidgetyPhantom::destroy;
-    res = params->registerObject((const base_byte_t *)"FidgetyPhantom", &rp);
+    res = params->registerObject((const base_byte_t*)"FidgetyPhantom", &rp);
     if (res < 0) {
         return NULL;
     }

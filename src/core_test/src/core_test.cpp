@@ -7,7 +7,7 @@
 int main()
 {
     bool backend = true;
-        // 是否是后台程序
+    // 是否是后台程序
     int a = 100;
     if (backend) {
 #ifdef WIN32

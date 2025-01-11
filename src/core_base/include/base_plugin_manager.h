@@ -20,25 +20,25 @@ class PluginManager
 public:
     typedef std::map<std::string, Base_RegisterParams> RegistrationMap;
 
-    static PluginManager & getInstance();
+    static PluginManager& getInstance();
     static base_int32_t initializePlugin(Base_InitFunc initFunc);
-    base_int32_t loadAll(const std::string & pluginDirectory, Base_InvokeServiceFunc func = NULL);
-    base_int32_t loadByPath(const std::string & path);
+    base_int32_t loadAll(const std::string& pluginDirectory, Base_InvokeServiceFunc func = NULL);
+    base_int32_t loadByPath(const std::string& path);
 
-    void * createObject(const std::string & objectType, IObjectAdapter & adapter);
+    void* createObject(const std::string& objectType, IObjectAdapter& adapter);
 
     base_int32_t shutdown();
-    static base_int32_t registerObject(const base_byte_t * nodeType, 
-                                       const Base_RegisterParams * params);
-    const RegistrationMap & getRegistrationMap();
-    Base_PlatformServices & getPlatformServices();
+    static base_int32_t registerObject(const base_byte_t* nodeType,
+        const Base_RegisterParams* params);
+    const RegistrationMap& getRegistrationMap();
+    Base_PlatformServices& getPlatformServices();
 
 private:
     ~PluginManager();
     PluginManager();
-    PluginManager(const PluginManager &);
+    PluginManager(const PluginManager&);
 
-    DynamicLibrary * loadLibrary(const std::string & path, std::string & errorString);
+    DynamicLibrary* loadLibrary(const std::string& path, std::string& errorString);
 
 private:
     bool                inInitializePlugin_;

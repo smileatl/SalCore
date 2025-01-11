@@ -1,16 +1,17 @@
 #include "kill_bunny.h"
 
-void * KillerBunny::create(Base_ObjectParams *)
+void* KillerBunny::create(Base_ObjectParams*)
 {
-  return new KillerBunny();
+    return new KillerBunny();
 }
 
-base_int32_t KillerBunny::destroy(void * p)
+base_int32_t KillerBunny::destroy(void* p)
 {
-  if (!p)
-    return -1;
-  delete (KillerBunny *)p;
-  return 0;
+    if (!p) {
+        return -1;
+    }
+    delete (KillerBunny*)p;
+    return 0;
 }
 
 KillerBunny::KillerBunny()

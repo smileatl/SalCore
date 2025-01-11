@@ -10,7 +10,7 @@
 
 BASE_BEGIN_EXTERN_C
 
-BASELIB_API PluginManagerHandle createPluginManager() 
+BASELIB_API PluginManagerHandle createPluginManager()
 {
     try {
         return &PluginManager::getInstance(); // ´´½¨ PluginManager ÊµÀý

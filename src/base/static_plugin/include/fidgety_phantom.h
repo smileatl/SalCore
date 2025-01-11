@@ -7,12 +7,12 @@ class FidgetyPhantom
 {
 public:
     // static plugin interface
-    static void * create(Base_ObjectParams *); 
-    static base_int32_t destroy(void *);
+    static void* create(Base_ObjectParams*);
+    static base_int32_t destroy(void*);
     ~FidgetyPhantom();
 
 private:
-  FidgetyPhantom();
+    FidgetyPhantom();
 };
 
 #endif // FIDGETY_PHANTOM

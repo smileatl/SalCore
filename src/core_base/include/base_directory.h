@@ -13,24 +13,25 @@ class Path;
 
 namespace Directory
 {
+
 // check if a directory exists
-bool exists(const std::string & path);
+bool exists(const std::string& path);
 //base_finfo_t a;
 
 // get current working directory
 std::string getCWD();
 
 // set current working directories
-void setCWD(const std::string & path);
+void setCWD(const std::string& path);
 
 // Copy directory tree rooted in 'source' to 'destination'
-void copyTree(const std::string & source, const std::string & destination);
+void copyTree(const std::string& source, const std::string& destination);
 
 // Remove directory tree rooted in 'path'
-void removeTree(const std::string & path);
+void removeTree(const std::string& path);
 
 // Create directory 'path' including all parent directories if missing
-void create(const std::string & path);
+void create(const std::string& path);
 
 struct Entry
 {
@@ -50,31 +51,31 @@ class Iterator
 {
 public:
 
-    Iterator(const Path & path);
-    Iterator(const std::string & path);
+    Iterator(const Path& path);
+    Iterator(const std::string& path);
     ~Iterator();
 
     // Resets directory to start. Subsequent call to next() 
     // will retrieve the first entry
     void reset();
     // get next directory entry
-    Entry * next(Entry & e);
+    Entry* next(Entry& e);
 
 private:
     Iterator();
-    Iterator(const Iterator &);
+    Iterator(const Iterator&);
 
-    void init(const std::string & path);
+    void init(const std::string& path);
 private:
     std::string path_;
-    #ifdef PF_PLATFORM_LINUX
-    DIR * handle_;
-    #else
-    apr_dir_t * handle_; // 这种指针需要构造时初始化，析构时释放
-    apr_pool_t * pool_; // 这种指针需要构造时初始化，析构时释放
-    #endif    
+#ifdef PF_PLATFORM_LINUX
+    DIR* handle_;
+#else
+    apr_dir_t* handle_; // 这种指针需要构造时初始化，析构时释放
+    apr_pool_t* pool_; // 这种指针需要构造时初始化，析构时释放
+#endif    
 };
 
-}
+} // namespace Directory
 
 #endif // BASE_DIRECTORY_H

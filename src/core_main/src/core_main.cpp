@@ -19,8 +19,8 @@ int main(int argc, char* argv[]) {
     sayHello();
     std::cout << "Hello SalCore!" << std::endl;
 
-    bool backend = false; // 是否是后台程序
-    
+    bool backend = true; // 是否是后台程序
+
 
     ////检测输入参数的个数
     //if (argc != 2)
